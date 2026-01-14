@@ -1,23 +1,12 @@
 import { useState } from 'react';
-import { Cloud, Zap, Power, Volume2, VolumeX, Type, Upload, User, ChevronDown } from 'lucide-react';
+import { Cloud, Power, Volume2, VolumeX, Type, ChevronDown } from 'lucide-react';
 
 export default function DashboardView() {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [liveCaptionsEnabled, setLiveCaptionsEnabled] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const defaultProfilePhoto = 'https://media.licdn.com/dms/image/v2/D5603AQFax1zuq5A-fQ/profile-displayphoto-shrink_800_800/B56Zh.hsnsG4Ao-/0/1754469421241?e=1770249600&v=beta&t=ufyDyuVOboIGhNDFphyxFP6YZT_QKE03qQZhqSeidYM';
   const [voiceTone, setVoiceTone] = useState<'Natural' | 'Calm' | 'Neutral' | 'Energetic'>('Natural');
   const [voiceSpeed, setVoiceSpeed] = useState<'Slow' | 'Normal' | 'Fast'>('Normal');
-
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePhoto(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const meetings = [
     { id: 39, date: '19/01/24', image: 'https://i.pinimg.com/1200x/f0/2b/80/f02b80a953895467c21cf25d31995e43.jpg' },
@@ -42,30 +31,12 @@ export default function DashboardView() {
               {/* Profile photo */}
               <div className="flex flex-col items-center space-y-3 flex-shrink-0">
                 <div className="relative">
-                  {profilePhoto ? (
-                    <img
-                      src={profilePhoto}
-                      alt="Profile"
-                      className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
-                    />
-                  ) : (
-                    <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-200">
-                      <User className="w-12 h-12 text-gray-400" />
-                    </div>
-                  )}
-                </div>
-                <label className="cursor-pointer">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                    className="hidden"
+                  <img
+                    src={defaultProfilePhoto}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
                   />
-                  <div className="flex items-center space-x-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors border border-blue-200">
-                    <Upload size={16} />
-                    <span className="text-sm font-medium">Upload photo</span>
-                  </div>
-                </label>
+                </div>
               </div>
 
               {/* Selectors */}
@@ -148,7 +119,7 @@ export default function DashboardView() {
                     <VolumeX className="text-gray-500" size={20} />
                   )}
                   <span className="text-sm font-medium">
-                    {audioEnabled ? 'Audio Enabled' : 'Audio Disabled'}
+                    {audioEnabled ? 'AI Enabled' : 'AI Disabled'}
                   </span>
                 </div>
                 <div className={`w-12 h-6 rounded-full transition-colors ${
@@ -188,7 +159,7 @@ export default function DashboardView() {
 
         <div className="flex-1 p-4 lg:p-6 space-y-4 lg:space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <h1 className="text-3xl lg:text-4xl font-semibold">Hi Ann!</h1>
+            <h1 className="text-3xl lg:text-4xl font-semibold">Hi Arianna!</h1>
 
             <div className="flex flex-wrap gap-2">
               {['Zoom', 'Meet', 'WeMeeting', 'Teams', 'Webex'].map((btn) => (
