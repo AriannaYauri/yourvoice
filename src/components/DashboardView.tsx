@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Cloud, Power, Volume2, VolumeX, Type, ChevronDown } from 'lucide-react';
+import { Cloud, Power, Volume2, VolumeX, Type, Upload, ChevronDown } from 'lucide-react';
 
 export default function DashboardView() {
   const [audioEnabled, setAudioEnabled] = useState(true);
@@ -36,6 +36,10 @@ export default function DashboardView() {
                     alt="Profile"
                     className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
                   />
+                </div>
+                <div className="flex items-center space-x-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors border border-blue-200 cursor-default">
+                  <Upload size={16} />
+                  <span className="text-sm font-medium">Upload photo</span>
                 </div>
               </div>
 
