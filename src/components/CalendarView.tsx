@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreVertical } from 'lucide-react';
 
+type Category = 'zoom' | 'meet' | 'teams' | 'webex' | 'wemeeting';
+
 interface Task {
   id: number;
   title: string;
   assignee: string;
   assigneeInitial: string;
-  color: 'purple' | 'light-purple' | 'purple-light' | 'blue' | 'light-blue' | 'blue-light' | 'green' | 'light-green' | 'green-light';
+  category: Category;
   date: string; // Format: "YYYY-MM-DD"
 }
 
@@ -95,77 +97,78 @@ export default function CalendarView() {
   const tasksByDate: Record<string, Task[]> = {
     // January 2026 examples
     '2026-01-04': [
-      { id: 1, title: 'Recruit New Talent', assignee: 'Helna Julie', assigneeInitial: 'HJ', color: 'green', date: '2026-01-04' },
+      { id: 1, title: 'Recruit New Talent', assignee: 'Helna Julie', assigneeInitial: 'HJ', category: 'zoom', date: '2026-01-04' },
     ],
     '2026-01-05': [
-      { id: 2, title: 'Market Services', assignee: 'Clair Burge', assigneeInitial: 'CB', color: 'green-light', date: '2026-01-05' },
+      { id: 2, title: 'Market Services', assignee: 'Clair Burge', assigneeInitial: 'CB', category: 'meet', date: '2026-01-05' },
     ],
     '2026-01-08': [
-      { id: 3, title: 'Resolve Payment Disputes', assignee: 'Clair Burge', assigneeInitial: 'CB', color: 'purple-light', date: '2026-01-08' },
-      { id: 4, title: 'Train Employees', assignee: 'Craig Curry', assigneeInitial: 'CC', color: 'blue-light', date: '2026-01-08' },
+      { id: 3, title: 'Resolve Payment Disputes', assignee: 'Clair Burge', assigneeInitial: 'CB', category: 'teams', date: '2026-01-08' },
+      { id: 4, title: 'Train Employees', assignee: 'Craig Curry', assigneeInitial: 'CC', category: 'webex', date: '2026-01-08' },
     ],
     '2026-01-09': [
-      { id: 5, title: 'Provide Customer Service', assignee: 'Christian Bass', assigneeInitial: 'CB', color: 'purple-light', date: '2026-01-09' },
+      { id: 5, title: 'Provide Customer Service', assignee: 'Christian Bass', assigneeInitial: 'CB', category: 'zoom', date: '2026-01-09' },
     ],
     '2026-01-10': [
-      { id: 6, title: 'Improve Efficiency', assignee: 'Christian Bass', assigneeInitial: 'CB', color: 'blue-light', date: '2026-01-10' },
+      { id: 6, title: 'Improve Efficiency', assignee: 'Christian Bass', assigneeInitial: 'CB', category: 'wemeeting', date: '2026-01-10' },
     ],
     '2026-01-11': [
-      { id: 7, title: 'Develop Processing Plans', assignee: 'Clair Burge', assigneeInitial: 'CB', color: 'purple', date: '2026-01-11' },
+      { id: 7, title: 'Develop Processing Plans', assignee: 'Clair Burge', assigneeInitial: 'CB', category: 'wemeeting', date: '2026-01-11' },
     ],
     '2026-01-12': [
-      { id: 8, title: 'Develop Processing Plans', assignee: 'Clair Burge', assigneeInitial: 'CB', color: 'purple', date: '2026-01-12' },
+      { id: 8, title: 'Develop Processing Plans', assignee: 'Clair Burge', assigneeInitial: 'CB', category: 'wemeeting', date: '2026-01-12' },
     ],
     '2026-01-14': [
-      { id: 9, title: 'Report To Management', assignee: 'Clair Burge', assigneeInitial: 'CB', color: 'green-light', date: '2026-01-14' },
+      { id: 9, title: 'Report To Management', assignee: 'Clair Burge', assigneeInitial: 'CB', category: 'meet', date: '2026-01-14' },
     ],
     '2026-01-15': [
-      { id: 10, title: 'Develop Strategic Plans', assignee: 'Christian Bass', assigneeInitial: 'CB', color: 'purple', date: '2026-01-15' },
+      { id: 10, title: 'Develop Strategic Plans', assignee: 'Christian Bass', assigneeInitial: 'CB', category: 'teams', date: '2026-01-15' },
     ],
     '2026-01-20': [
-      { id: 11, title: 'Resolve Disputes', assignee: 'Brandon Crawford', assigneeInitial: 'BC', color: 'purple-light', date: '2026-01-20' },
+      { id: 11, title: 'Resolve Disputes', assignee: 'Brandon Crawford', assigneeInitial: 'BC', category: 'zoom', date: '2026-01-20' },
     ],
     '2026-01-21': [
-      { id: 12, title: 'Build Relationships', assignee: 'Craig Curry', assigneeInitial: 'CC', color: 'purple', date: '2026-01-21' },
+      { id: 12, title: 'Build Relationships', assignee: 'Craig Curry', assigneeInitial: 'CC', category: 'webex', date: '2026-01-21' },
     ],
     '2026-01-22': [
-      { id: 13, title: 'Develop Processing Plans', assignee: 'Helna Julie', assigneeInitial: 'HJ', color: 'purple-light', date: '2026-01-22' },
+      { id: 13, title: 'Develop Processing Plans', assignee: 'Helna Julie', assigneeInitial: 'HJ', category: 'wemeeting', date: '2026-01-22' },
     ],
     '2026-01-23': [
-      { id: 14, title: 'Create Training Programs', assignee: 'Brandon Crawford', assigneeInitial: 'BC', color: 'blue', date: '2026-01-23' },
+      { id: 14, title: 'Create Training Programs', assignee: 'Brandon Crawford', assigneeInitial: 'BC', category: 'meet', date: '2026-01-23' },
     ],
   };
 
-  const getColorClasses = (color: Task['color']) => {
-    switch (color) {
-      // Purple variations
-      case 'purple':
-        return 'bg-purple-500 text-white';
-      case 'light-purple':
-        return 'bg-purple-100 text-purple-900 border border-purple-300';
-      case 'purple-light':
-        return 'bg-purple-50 text-purple-800 border border-purple-200';
-      // Blue variations
-      case 'blue':
+  const getColorClasses = (category: Category) => {
+    switch (category) {
+      case 'zoom':
         return 'bg-blue-500 text-white';
-      case 'light-blue':
-        return 'bg-blue-100 text-blue-900 border border-blue-300';
-      case 'blue-light':
-        return 'bg-blue-50 text-blue-800 border border-blue-200';
-      // Green variations
-      case 'green':
+      case 'meet':
         return 'bg-green-500 text-white';
-      case 'light-green':
-        return 'bg-green-100 text-green-900 border border-green-300';
-      case 'green-light':
-        return 'bg-green-50 text-green-800 border border-green-200';
+      case 'teams':
+        return 'bg-purple-500 text-white';
+      case 'webex':
+        return 'bg-orange-500 text-white';
+      case 'wemeeting':
+        return 'bg-indigo-500 text-white';
       default:
         return 'bg-gray-50 text-gray-900 border border-gray-200';
     }
   };
 
-  const isDarkColor = (color: Task['color']) => {
-    return color === 'purple' || color === 'blue' || color === 'green';
+  const isDarkColor = (category: Category) => {
+    return true;
+  };
+
+  const categoryLabels: Record<Category, string> = {
+    zoom: 'Zoom',
+    meet: 'Meet',
+    teams: 'Teams',
+    webex: 'Webex',
+    wemeeting: 'Wemeeting',
+  };
+
+  const handleTodayClick = () => {
+    window.open('https://meet.google.com/ptm-xayy-msc', '_blank');
   };
 
   return (
@@ -216,10 +219,11 @@ export default function CalendarView() {
                 return (
                   <div
                     key={dayIndex}
+                    onClick={today ? handleTodayClick : undefined}
                     className={`min-h-[80px] sm:min-h-[100px] lg:min-h-[120px] rounded-lg border transition-all ${
                       day
                         ? today
-                          ? 'bg-blue-50 border-blue-300 border-2'
+                          ? 'bg-blue-50 border-blue-300 border-2 cursor-pointer hover:bg-blue-100'
                           : 'bg-white border-gray-200 hover:border-gray-300'
                         : 'bg-gray-50 border-transparent'
                     }`}
@@ -247,21 +251,21 @@ export default function CalendarView() {
                           {tasks.slice(0, 2).map((task) => (
                             <div
                               key={task.id}
-                              className={`${getColorClasses(task.color)} rounded-md p-1.5 sm:p-2 text-[10px] sm:text-xs cursor-pointer hover:opacity-90 transition-opacity group relative`}
+                              className={`${getColorClasses(task.category)} rounded-md p-1.5 sm:p-2 text-[10px] sm:text-xs cursor-pointer hover:opacity-90 transition-opacity group relative`}
                             >
                               <div className="flex items-start justify-between gap-1">
                                 <div className="flex-1 min-w-0">
                                   <div className="font-medium truncate mb-1">{task.title}</div>
                                   <div className="flex items-center gap-1.5">
                                     <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-semibold ${
-                                      isDarkColor(task.color)
+                                      isDarkColor(task.category)
                                         ? 'bg-white/30 text-white'
                                         : 'bg-gray-200 text-gray-700'
                                     }`}>
                                       {task.assigneeInitial[0]}
                                     </div>
                                     <span className={`text-[9px] truncate ${
-                                      isDarkColor(task.color)
+                                      isDarkColor(task.category)
                                         ? 'text-white/90'
                                         : 'text-gray-600'
                                     }`}>
@@ -272,7 +276,7 @@ export default function CalendarView() {
                                 <MoreVertical 
                                   size={10} 
                                   className={`flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ${
-                                    isDarkColor(task.color)
+                                    isDarkColor(task.category)
                                       ? 'text-white'
                                       : 'text-gray-500'
                                   }`}
@@ -299,42 +303,12 @@ export default function CalendarView() {
         <div className="mt-6 pt-6 border-t border-gray-200">
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm">
             <span className="text-gray-600 font-medium">Legend:</span>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-purple-500"></div>
-              <span className="text-gray-700">Purple - High</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-purple-100 border border-purple-300"></div>
-              <span className="text-gray-700">Purple - Medium</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-purple-50 border border-purple-200"></div>
-              <span className="text-gray-700">Purple - Light</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-blue-500"></div>
-              <span className="text-gray-700">Blue - High</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-blue-100 border border-blue-300"></div>
-              <span className="text-gray-700">Blue - Medium</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-blue-50 border border-blue-200"></div>
-              <span className="text-gray-700">Blue - Light</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-green-500"></div>
-              <span className="text-gray-700">Green - High</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-green-100 border border-green-300"></div>
-              <span className="text-gray-700">Green - Medium</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-green-50 border border-green-200"></div>
-              <span className="text-gray-700">Green - Light</span>
-            </div>
+            {(Object.keys(categoryLabels) as Category[]).map((category) => (
+              <div key={category} className="flex items-center gap-2">
+                <div className={`w-4 h-4 rounded ${getColorClasses(category).split(' ')[0]}`}></div>
+                <span className="text-gray-700">{categoryLabels[category]}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
